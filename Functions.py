@@ -10,17 +10,10 @@ from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import StaleElementReferenceException, TimeoutException, UnexpectedAlertPresentException, NoSuchFrameException, NoAlertPresentException, ElementNotVisibleException, InvalidElementStateException
 from urllib.parse import urlparse, urljoin
 import json
-import pprint
-import datetime
-import tldextract
-import math
 import os
 import traceback
-import random
-import re
 import logging
 import copy
-import time
 import operator
 
 import Classes

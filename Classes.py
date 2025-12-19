@@ -14,15 +14,10 @@ from selenium.common.exceptions import (StaleElementReferenceException,
 from urllib.parse import urlparse, urljoin
 import json
 import pprint
-import datetime
-import tldextract
-import math
 import os
 import traceback
 import random
-import re
 import time
-import itertools
 import string
 
 from Functions import *
