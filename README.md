@@ -12,4 +12,6 @@ PATH=$PATH:.
 
 python3 crawl.py --url http://example.com
 
+Or
 
+python3 crawl.py --url http://example.com --remote "http://localhost:4444/wd/hub"
