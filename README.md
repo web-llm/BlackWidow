@@ -2,6 +2,12 @@
 
 ## Running Black Widow
 
+1. Install dependencies
+
+```sh
+uv sync
+```
+
 1. Add chromedriver to your path
 
 Example for current directory on linux:
@@ -10,8 +16,12 @@ PATH=$PATH:.
 
 2. Run the scanner
 
-python3 crawl.py --url http://example.com
+```sh
+uv run crawl.py --url http://example.com
+```
 
 Or
 
-python3 crawl.py --url http://example.com --remote "http://localhost:4444/wd/hub"
+```sh
+uv run crawl.py --url http://example.com --remote "http://localhost:4444/wd/hub"
+```
