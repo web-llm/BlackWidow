@@ -1,6 +1,9 @@
 from selenium import webdriver
 from selenium.webdriver.remote.webdriver import WebDriver
 import argparse
+import os
+import shutil
+import tempfile
 
 from Classes import *
 
@@ -8,6 +11,8 @@ parser = argparse.ArgumentParser(description='Crawler')
 parser.add_argument("--debug", action='store_true',  help="Dont use path deconstruction and recon scan. Good for testing single URL")
 parser.add_argument("--url", help="Custom URL to crawl")
 parser.add_argument("--remote", help="Remote WebDriver URL")
+parser.add_argument("--headless", action='store_true', help="Force headless Chrome mode")
+parser.add_argument("--chrome-binary", help="Path to Chrome/Chromium binary")
 args = parser.parse_args()
 
 # Clean form_files/dynamic
@@ -25,6 +30,26 @@ WebDriver.add_script = add_script
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument("--disable-web-security")
 chrome_options.add_argument("--disable-xss-auditor")
+
+# Linux CI/container/snap environments typically need these flags.
+chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument("--disable-dev-shm-usage")
+chrome_options.add_argument("--disable-gpu")
+
+is_headless_env = not os.environ.get("DISPLAY") and not os.environ.get("WAYLAND_DISPLAY")
+if args.headless or is_headless_env:
+    chrome_options.add_argument("--headless=new")
+
+if args.chrome_binary:
+    chrome_options.binary_location = args.chrome_binary
+else:
+    chrome_bin = shutil.which("google-chrome") or shutil.which("chromium") or shutil.which("chromium-browser") or shutil.which("/snap/bin/chromium")
+    if chrome_bin:
+        chrome_options.binary_location = chrome_bin
+
+chrome_options.add_argument("--remote-debugging-port=9222")
+chrome_options.add_argument("--remote-debugging-address=127.0.0.1")
+chrome_options.add_argument(f"--user-data-dir={tempfile.mkdtemp(prefix='blackwidow-chrome-profile-')}")
 
 # launch Chrome
 if args.remote:
